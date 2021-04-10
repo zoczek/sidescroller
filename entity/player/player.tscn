@@ -1,0 +1,290 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://entity/player/state_machine/state_machine.gd" type="Script" id=1]
+[ext_resource path="res://entity/player/weapon/weapon.gd" type="Script" id=3]
+[ext_resource path="res://entity/player/weapon/weapon_range.gd" type="Script" id=4]
+[ext_resource path="res://entity/player/weapon/weapon_stats.gd" type="Script" id=5]
+[ext_resource path="res://entity/player/state_machine/movement/air.gd" type="Script" id=6]
+[ext_resource path="res://entity/player/animator.gd" type="Script" id=7]
+[ext_resource path="res://entity/player/state_machine/movement/run.gd" type="Script" id=8]
+[ext_resource path="res://entity/player/player.gd" type="Script" id=9]
+[ext_resource path="res://entity/player/sprites/circle_white.png" type="Texture" id=10]
+[ext_resource path="res://entity/player/state_machine/movement/move.gd" type="Script" id=11]
+[ext_resource path="res://entity/player/ui/ui_objective_arrows.gd" type="Script" id=12]
+[ext_resource path="res://entity/player/state_machine/attack/player_state_attack_range.gd" type="Script" id=13]
+[ext_resource path="res://entity/player/state_machine/attack/player_state_attack.gd" type="Script" id=14]
+[ext_resource path="res://entity/player/state_machine/attack/player_state_attack_melee.gd" type="Script" id=15]
+[ext_resource path="res://entity/player/state_machine/attack/player_state_attack_idle.gd" type="Script" id=16]
+[ext_resource path="res://entity/player/usable_range.gd" type="Script" id=17]
+[ext_resource path="res://sprites/WhitePixel.png" type="Texture" id=18]
+
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 7.31335
+height = 15.9651
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 52.7397
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 13.7168
+
+[sub_resource type="Animation" id=4]
+tracks/0/type = "value"
+tracks/0/path = NodePath("weapon_sfx:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("collider:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("collider:shape")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.001 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ SubResource( 3 ), SubResource( 3 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("weapon_sfx:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.001 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1.63438, 1.43406 ), Vector2( 0.907817, 0.894998 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("collider:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.001 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ Vector2( 13.4706, 0.838234 ), Vector2( -0.2794, 0.338234 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("weapon_sfx:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.001 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 10.9134, 0.595278 ), Vector2( -0.7116, 1.22028 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+tracks/0/type = "value"
+tracks/0/path = NodePath("weapon_sfx:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("weapon_sfx:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.001, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 2.498, 1.434 ), Vector2( 1.11573, 0.796667 ), Vector2( 1.63248, 1.43406 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("weapon_sfx:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.001, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 26.7874, 2.18268 ), Vector2( 2.55219, 0.990788 ), Vector2( 12.8976, 1.38898 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("collider:shape")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.001 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ SubResource( 3 ), SubResource( 3 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("collider:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ Vector2( 4.0672, 0.792802 ), Vector2( 13.0961, 1.5874 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("collider:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+
+[node name="player" type="KinematicBody2D" groups=[
+"player",
+]]
+collision_layer = 2
+script = ExtResource( 9 )
+
+[node name="state_machine_movement" type="Node2D" parent="." groups=[
+"state_machine",
+]]
+script = ExtResource( 1 )
+starting_state = "move/run"
+
+[node name="move" type="Node2D" parent="state_machine_movement"]
+script = ExtResource( 11 )
+
+[node name="run" type="Node2D" parent="state_machine_movement/move"]
+script = ExtResource( 8 )
+
+[node name="air" type="Node2D" parent="state_machine_movement/move"]
+script = ExtResource( 6 )
+
+[node name="dodge_cooldown" type="Timer" parent="state_machine_movement/move"]
+
+[node name="state_machine_combat" type="Node2D" parent="." groups=[
+"state_machine",
+]]
+script = ExtResource( 1 )
+starting_state = "idle"
+
+[node name="idle" type="Node2D" parent="state_machine_combat"]
+script = ExtResource( 16 )
+
+[node name="attack" type="Node2D" parent="state_machine_combat"]
+script = ExtResource( 14 )
+
+[node name="melee" type="Node2D" parent="state_machine_combat/attack"]
+script = ExtResource( 15 )
+
+[node name="range" type="Node2D" parent="state_machine_combat/attack"]
+script = ExtResource( 13 )
+
+[node name="collider" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="sprite" type="Sprite" parent="."]
+modulate = Color( 0.403922, 0.607843, 1, 1 )
+scale = Vector2( 0.5, 1 )
+texture = ExtResource( 18 )
+
+[node name="animator" type="AnimationPlayer" parent="."]
+script = ExtResource( 7 )
+
+[node name="usable_range" type="Area2D" parent="."]
+visible = false
+script = ExtResource( 17 )
+
+[node name="collider" type="CollisionShape2D" parent="usable_range"]
+shape = SubResource( 2 )
+
+[node name="weapon" type="Area2D" parent="." groups=[
+"weapon",
+]]
+position = Vector2( 24.3451, -1.2818 )
+script = ExtResource( 3 )
+
+[node name="collider" type="CollisionShape2D" parent="weapon"]
+position = Vector2( 4.0672, 0.792802 )
+shape = SubResource( 3 )
+disabled = true
+
+[node name="animation_player" type="AnimationPlayer" parent="weapon"]
+anims/attack_1 = SubResource( 4 )
+anims/attack_2 = SubResource( 4 )
+anims/attack_3 = SubResource( 5 )
+
+[node name="weapon_stats" type="Node" parent="weapon"]
+script = ExtResource( 5 )
+knockback = 400.0
+
+[node name="weapon_sfx" type="Sprite" parent="weapon"]
+visible = false
+modulate = Color( 0.8, 0.431373, 0.431373, 1 )
+position = Vector2( 26.7874, 2.18268 )
+scale = Vector2( 2.498, 1.434 )
+texture = ExtResource( 10 )
+
+[node name="next_attack_timer" type="Timer" parent="weapon"]
+wait_time = 0.9
+one_shot = true
+
+[node name="weapon_range" type="Node2D" parent="."]
+position = Vector2( 16.8469, -14.6038 )
+script = ExtResource( 4 )
+
+[node name="weapon_stats" type="Node" parent="weapon_range"]
+script = ExtResource( 5 )
+knockback = 300.0
+
+[node name="regen_timer" type="Timer" parent="."]
+autostart = true
+
+[node name="ui" type="Node2D" parent="."]
+
+[node name="objective_arrows" type="Node2D" parent="ui"]
+script = ExtResource( 12 )
+[connection signal="timeout" from="state_machine_movement/move/dodge_cooldown" to="state_machine_movement/move" method="_on_dodge_cooldown_timeout"]
+[connection signal="area_entered" from="usable_range" to="usable_range" method="_on_usable_range_area_entered"]
+[connection signal="area_exited" from="usable_range" to="usable_range" method="_on_usable_range_area_exited"]
+[connection signal="body_entered" from="weapon" to="weapon" method="_on_weapon_body_entered"]
+[connection signal="timeout" from="weapon/next_attack_timer" to="weapon" method="_on_next_attack_timer_timeout"]
+[connection signal="timeout" from="regen_timer" to="." method="_on_regen_timer_timeout"]

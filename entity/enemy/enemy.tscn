@@ -1,0 +1,92 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://entity/player/state_machine/state_machine.gd" type="Script" id=1]
+[ext_resource path="res://sprites/WhitePixel.png" type="Texture" id=2]
+[ext_resource path="res://entity/enemy/enemy.gd" type="Script" id=3]
+[ext_resource path="res://entity/enemy/state_machine/enemy_move.gd" type="Script" id=4]
+[ext_resource path="res://entity/enemy/damage_area.gd" type="Script" id=5]
+[ext_resource path="res://entity/enemy/enemy_health_bar.gd" type="Script" id=6]
+[ext_resource path="res://entity/enemy/state_machine/enemy_spawn.gd" type="Script" id=8]
+
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 7.90926, 15.6252 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 7.90926, 16.1324 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "spawn"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.5, 0.25 ), Vector2( 0.5, 1 ) ]
+}
+
+[node name="enemy" type="KinematicBody2D" groups=[
+"enemy",
+]]
+position = Vector2( 2.10223, -8.82942 )
+collision_layer = 4
+script = ExtResource( 3 )
+
+[node name="state_machine" type="Node2D" parent="." groups=[
+"state_machine",
+]]
+script = ExtResource( 1 )
+starting_state = "spawn"
+
+[node name="spawn" type="Node2D" parent="state_machine"]
+script = ExtResource( 8 )
+
+[node name="move" type="Node2D" parent="state_machine"]
+script = ExtResource( 4 )
+
+[node name="collider" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="damage_area" type="Area2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="collider" type="CollisionShape2D" parent="damage_area"]
+position = Vector2( 0, -0.33371 )
+shape = SubResource( 2 )
+
+[node name="edge_detector" type="RayCast2D" parent="."]
+position = Vector2( 10.5782, -2.35809 )
+enabled = true
+cast_to = Vector2( 0, 90 )
+
+[node name="wall_detector" type="RayCast2D" parent="."]
+position = Vector2( 0.943863, 9.56191 )
+enabled = true
+cast_to = Vector2( 25, 0 )
+
+[node name="sprite" type="Sprite" parent="."]
+modulate = Color( 0.988235, 0.521569, 0.521569, 1 )
+position = Vector2( 0, -0.396851 )
+scale = Vector2( 0.5, 0.25 )
+texture = ExtResource( 2 )
+
+[node name="animation_player" type="AnimationPlayer" parent="sprite"]
+anims/spawn = SubResource( 3 )
+
+[node name="hp_bar" type="ProgressBar" parent="."]
+margin_left = -14.0917
+margin_top = -29.4997
+margin_right = 37.9083
+margin_bottom = -15.4997
+rect_scale = Vector2( 0.512543, 0.556522 )
+max_value = 1.0
+percent_visible = false
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

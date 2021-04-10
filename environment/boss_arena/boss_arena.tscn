@@ -1,0 +1,92 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://tilemap/tileset.tres" type="TileSet" id=1]
+[ext_resource path="res://environment/boss_arena/boss_arena.gd" type="Script" id=2]
+[ext_resource path="res://sprites/WhitePixel.png" type="Texture" id=3]
+[ext_resource path="res://environment/gate/gate.tscn" type="PackedScene" id=4]
+[ext_resource path="res://environment/boss_arena/area_ui.gd" type="Script" id=5]
+[ext_resource path="res://environment/boss_arena/game_end.gd" type="Script" id=6]
+
+
+[node name="boss_arena" type="Node2D" groups=[
+"map",
+]]
+position = Vector2( 0.749146, 0 )
+script = ExtResource( 2 )
+
+[node name="player_spawn_position" type="Node2D" parent="."]
+position = Vector2( 463.982, 709.02 )
+
+[node name="boss_spawn_position" type="Node2D" parent="."]
+position = Vector2( 791.434, 711.906 )
+
+[node name="TileMap" type="TileMap" parent="." groups=[
+"wall",
+]]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+cell_tile_origin = 1
+centered_textures = true
+format = 1
+tile_data = PoolIntArray( 1900570, 1, 0, 1900571, 1, 0, 1900572, 1, 0, 1900573, 1, 0, 1900574, 1, 0, 1900575, 1, 0, 1900576, 1, 0, 1900577, 1, 0, 1900578, 1, 0, 1900579, 1, 0, 1900580, 1, 0, 1900581, 1, 0, 1900582, 1, 0, 1900583, 1, 0, 1900584, 1, 0, 1900585, 1, 0, 1900586, 1, 0, 1900587, 1, 0, 1900588, 1, 0, 1900589, 1, 0, 1900590, 1, 0, 1900591, 1, 0, 1900592, 1, 0, 1900593, 1, 0, 1900594, 1, 0, 1900595, 1, 0, 1900596, 1, 0, 1900597, 1, 0, 1900598, 1, 0, 1900599, 1, 0, 1900600, 1, 0, 1900601, 1, 0, 1966106, 1, 0, 1966137, 1, 0, 2031642, 1, 0, 2031673, 1, 0, 2097178, 1, 0, 2097209, 1, 0, 2162714, 1, 0, 2162745, 1, 0, 2228250, 1, 0, 2228281, 1, 0, 2293786, 1, 0, 2293817, 1, 0, 2359322, 1, 0, 2359353, 1, 0, 2424858, 1, 0, 2424889, 1, 0, 2490394, 1, 0, 2490425, 1, 0, 2555930, 1, 0, 2555961, 1, 0, 2621466, 1, 0, 2621497, 1, 0, 2687002, 1, 0, 2687033, 1, 0, 2752538, 1, 0, 2752569, 1, 0, 2818074, 1, 0, 2818105, 1, 0, 2883610, 1, 0, 2883641, 1, 0, 2949146, 1, 0, 2949177, 1, 0, 3014680, 0, 0, 3014681, 0, 0, 3014682, 0, 0, 3014683, 0, 0, 3014684, 0, 0, 3014685, 0, 0, 3014686, 0, 0, 3014687, 0, 0, 3014688, 0, 0, 3014689, 0, 0, 3014690, 0, 0, 3014691, 0, 0, 3014692, 0, 0, 3014693, 0, 0, 3014694, 0, 0, 3014695, 0, 0, 3014696, 0, 0, 3014697, 0, 0, 3014698, 0, 0, 3014699, 0, 0, 3014700, 0, 0, 3014701, 0, 0, 3014702, 0, 0, 3014703, 0, 0, 3014704, 0, 0, 3014705, 0, 0, 3014706, 0, 0, 3014707, 0, 0, 3014708, 0, 0, 3014709, 0, 0, 3014710, 0, 0, 3014711, 0, 0, 3014712, 0, 0, 3014713, 0, 0, 3014714, 0, 0 )
+
+[node name="gate" parent="." instance=ExtResource( 4 )]
+position = Vector2( 876.113, 698.088 )
+
+[node name="game_end" type="RichTextLabel" parent="."]
+visible = false
+margin_left = 563.202
+margin_top = 641.704
+margin_right = 897.202
+margin_bottom = 768.704
+mouse_filter = 2
+text = "The end... for now."
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="area_ui" type="CanvasLayer" parent="."]
+script = ExtResource( 5 )
+
+[node name="boss_hp" type="TextureProgress" parent="area_ui"]
+anchor_left = 0.531518
+anchor_top = 0.986654
+anchor_right = 0.531518
+anchor_bottom = 0.986654
+margin_left = -200.0
+margin_top = -40.0
+margin_right = 200.0
+margin_bottom = -21.3348
+max_value = 1.0
+step = 0.01
+value = 0.5
+texture_under = ExtResource( 3 )
+texture_progress = ExtResource( 3 )
+tint_under = Color( 0.384314, 0.0196078, 0.0196078, 1 )
+tint_over = Color( 0.403922, 0.0823529, 0.0588235, 1 )
+tint_progress = Color( 0.976471, 0.0941176, 0.0941176, 1 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="boss_name" type="RichTextLabel" parent="area_ui"]
+anchor_left = 0.585
+anchor_top = 0.876908
+anchor_right = 0.585
+anchor_bottom = 0.876908
+margin_left = -117.959
+margin_top = -18.9463
+margin_right = 14.0408
+margin_bottom = 21.0537
+text = "Big Red Rectangle"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 669.012, 612.281 )
+scale = Vector2( 3.59143, 1.59437 )
+current = true
+zoom = Vector2( 0.5, 0.5 )

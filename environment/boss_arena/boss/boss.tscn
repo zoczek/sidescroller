@@ -1,0 +1,185 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://environment/boss_arena/boss/boss_state_move.gd" type="Script" id=1]
+[ext_resource path="res://environment/boss_arena/boss/boss.gd" type="Script" id=2]
+[ext_resource path="res://sprites/WhitePixel.png" type="Texture" id=3]
+[ext_resource path="res://environment/boss_arena/boss/damage_area.gd" type="Script" id=4]
+[ext_resource path="res://environment/boss_arena/boss/boss_state_air.gd" type="Script" id=5]
+[ext_resource path="res://environment/boss_arena/boss/boss_state_idle.gd" type="Script" id=6]
+[ext_resource path="res://environment/boss_arena/boss/boss_state_charge.gd" type="Script" id=7]
+
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+class_name StateMachine
+
+export(String) var starting_state: String = \"\"
+
+var state:State = null
+var history = []
+
+
+func _ready() -> void:
+	state = get_node(starting_state)
+	_enter_state()
+
+
+func _enter_state(msg: Dictionary = {}) -> void:
+	state.enter(msg)
+
+
+func _process(delta: float) -> void:
+	state.process(delta)
+
+
+func _physics_process(delta: float) -> void:
+	state.physics_process(delta)
+
+
+func _input(event: InputEvent) -> void:
+	state.input(event)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	state.unhandled_input(event)
+
+
+func change_to(new_state, msg: Dictionary = {}) -> void:
+	state.exit()
+	history.append(state.get_path())
+	state = get_node(new_state)
+	_enter_state(msg)
+	
+func back() -> void:
+	if history.size() > 0:
+		state = get_node(history.pop_back())
+		_enter_state()
+
+
+"
+
+[sub_resource type="Animation" id=2]
+resource_name = "charge"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("view:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.4, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1.78834, 2.83946 ), Vector2( 3.30834, 1.23946 ), Vector2( 1.78834, 2.83946 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("view:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.4, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 26 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("view:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1.78834, 2.83946 ), Vector2( 2.05561, 2.67054 ), Vector2( 1.78834, 2.83946 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("view:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -6.22869e-06, 2.7027 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 28.6239, 45.5245 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 31.2932, 47.527 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 102.5, 16.5 )
+
+[node name="boss" type="KinematicBody2D" groups=[
+"enemy",
+]]
+scale = Vector2( 0.75, 0.75 )
+collision_layer = 4
+script = ExtResource( 2 )
+
+[node name="state_machine" type="Node" parent="." groups=[
+"state_machine",
+]]
+script = SubResource( 1 )
+starting_state = "move/idle"
+
+[node name="move" type="Node2D" parent="state_machine"]
+script = ExtResource( 1 )
+
+[node name="idle" type="Node2D" parent="state_machine/move"]
+script = ExtResource( 6 )
+
+[node name="jump_timer" type="Timer" parent="state_machine/move/idle"]
+one_shot = true
+
+[node name="charge" type="Node2D" parent="state_machine/move"]
+script = ExtResource( 7 )
+
+[node name="air" type="Node2D" parent="state_machine/move"]
+script = ExtResource( 5 )
+
+[node name="animator" type="AnimationPlayer" parent="."]
+anims/charge = SubResource( 2 )
+anims/idle = SubResource( 3 )
+
+[node name="view" type="Sprite" parent="."]
+modulate = Color( 0.815686, 0.329412, 0.329412, 1 )
+scale = Vector2( 1.78834, 2.83946 )
+texture = ExtResource( 3 )
+
+[node name="collision" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource( 4 )
+
+[node name="damage_area" type="Area2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="damage_area"]
+shape = SubResource( 5 )
+
+[node name="landing_collision" type="CollisionShape2D" parent="damage_area"]
+position = Vector2( -0.5, 32.5 )
+shape = SubResource( 6 )
+disabled = true
+
+[node name="landing_sprite" type="Sprite" parent="damage_area"]
+visible = false
+modulate = Color( 0.580392, 0.321569, 0.321569, 0.745098 )
+position = Vector2( -0.499996, 32.5 )
+scale = Vector2( 6.34375, 1 )
+texture = ExtResource( 3 )
+[connection signal="timeout" from="state_machine/move/idle/jump_timer" to="state_machine/move/idle" method="_on_jump_timer_timeout"]
+[connection signal="body_entered" from="damage_area" to="." method="_on_damage_area_body_entered"]
